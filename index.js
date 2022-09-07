@@ -2,6 +2,7 @@
 exports.__esModule = true;
 var BotTask = /** @class */ (function () {
     function BotTask(name, action, delay) {
+        if (delay === void 0) { delay = 0; }
         this.name = name;
         this.action = action;
         this.delay = delay;
