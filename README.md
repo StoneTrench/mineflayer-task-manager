@@ -5,7 +5,7 @@ A very simple mineflayer task manager. It's promise based.
 Example usage:
 ```ts
 import { createBot } from "mineflayer";
-import botTaskManager from "../index";
+import botTaskManager from "mineflayer-task-manager";
 
 const bot = createBot({
     username: "Stephen",
