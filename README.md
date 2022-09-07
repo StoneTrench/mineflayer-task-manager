@@ -2,6 +2,32 @@
 
 A very simple mineflayer task manager. It's promise based.
 
+Example usage:
+```ts
+import { createBot } from "mineflayer";
+import botTaskManager from "../index";
+
+const bot = createBot({
+    username: "Stephen",
+    host: "localhost",
+    port: 25565
+})
+
+bot.loadPlugin(botTaskManager)
+
+bot.once("spawn", () => {
+    // Bot will say "Hello 2" one second after it spawned because of Hello 1 executing after 1000 ms,
+    // since it was inserted to the start after this was added.
+    bot.taskManager_Add("Hello 2", async (b) => b.chat("Hello 2"), 0)
+
+    // Bot will execute this second
+    bot.taskManager_Insert("Hello 1", async (b) => b.chat("Hello 1"), 1000)
+
+    // Bot will execute this first
+    bot.taskManager_Insert("Hello 0", async (b) => b.chat("Hello 0"))
+})
+```
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
