@@ -9,7 +9,7 @@ var BotTask = /** @class */ (function () {
     }
     return BotTask;
 }());
-exports["default"] = (function (bot) {
+function Plugin(bot) {
     var taskQueue = [];
     bot.taskManager_Add = function (name, action, delay) {
         if (delay === void 0) { delay = 0; }
@@ -40,7 +40,8 @@ exports["default"] = (function (bot) {
             taskQueue.splice(0, 1);
         }
     });
-});
+}
+exports["default"] = Plugin;
 function waitFor(ms) {
     return new Promise(function (resolve) { return setTimeout(resolve, ms); });
 }
