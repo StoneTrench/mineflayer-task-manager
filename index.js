@@ -41,7 +41,7 @@ function Plugin(bot) {
         }
     });
 }
-exports["default"] = Plugin;
+exports.Plugin = Plugin;
 function waitFor(ms) {
     return new Promise(function (resolve) { return setTimeout(resolve, ms); });
 }
