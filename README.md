@@ -1,30 +1,30 @@
 # mineflayer-task-manager
 
-A very simple mineflayer task manager. It's promise based.
+A very simple mineflayer task manager. It's promise based, but you can use simple functions in the queue.
 
 Example usage:
 ```ts
 import { createBot } from "mineflayer";
-import botTaskManager from "mineflayer-task-manager";
+import TaskManager from "mineflayer-task-manager";
 
 const bot = createBot({
-    username: "Stephen",
+    username: "Steve",
     host: "localhost",
     port: 25565
 })
 
-bot.loadPlugin(botTaskManager)
+bot.loadPlugin(TaskManager)
 
 bot.once("spawn", () => {
     // Bot will say "Hello 2" one second after it spawned because of Hello 1 executing after 1000 ms,
     // since it was inserted to the start after this was added.
-    bot.taskManager_Add("Hello 2", (b) => b.chat("Hello 2"), 0)
+    bot.taskManager.Add("Hello 2", (b) => b.chat("Hello 2"), 0)
 
     // Bot will execute this second
-    bot.taskManager_Insert("Hello 1", (b) => b.chat("Hello 1"), 1000)
+    bot.taskManager.Insert("Hello 1", (b) => b.chat("Hello 1"), 1000)
 
     // Bot will execute this first
-    bot.taskManager_Insert("Hello 0", (b) => b.chat("Hello 0"))
+    bot.taskManager.Insert("Hello 0", (b) => b.chat("Hello 0"))
 
     bot.taskManager.Add("look", async (b) => await b.lookAt(b.entity.position.offset(0, 0, 1)), 0)
 })
@@ -60,34 +60,22 @@ bot.once("spawn", () => {
 
 ## Bot functions
 
-### Resume: () => void
-
 #### Resume: () => void
 	Resumes executing tasks in the queue.
-
-### Pause: () => void
 
 #### Pause: () => void
 	Stops executing tasks in the queue.
 
-### GetWholeQueue: () => BotTask[]
-
 #### GetWholeQueue: () => BotTask[]
 	Get the queue.
-
-### Get: (index?: number) => BotTask
 
 #### Get: (index?: number) => BotTask
 	Get an action from the queue.
 	`index` the index of the task, set to 0 by default.
 
-### Remove: (name: string) => void
-
 #### Remove: (name: string) => void
 	Remove an action from the queue.
 	`name` The name of the action use it to distinguish it from the rest.
-
-### Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
 
 #### Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
 	Add an action to the start of the task queue.
@@ -95,16 +83,8 @@ bot.once("spawn", () => {
 	`action` the promise based function to execute when we get to it.
 	`delay` the time in ms to wait before executing the action, set to 0 by default.
 
-### Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
-
 #### Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
 	Add an action to the task queue.
 	`name` The name of the action use it to distinguish it from the rest.
 	`action` the promise based function to execute when we get to it.
 	`delay` the time in ms to wait before executing the action, set to 0 by default.
-
-## Bot variables
-
-### TaskManager: {
-
-#### taskManager: {
