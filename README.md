@@ -18,13 +18,15 @@ bot.loadPlugin(botTaskManager)
 bot.once("spawn", () => {
     // Bot will say "Hello 2" one second after it spawned because of Hello 1 executing after 1000 ms,
     // since it was inserted to the start after this was added.
-    bot.taskManager_Add("Hello 2", async (b) => b.chat("Hello 2"), 0)
+    bot.taskManager_Add("Hello 2", (b) => b.chat("Hello 2"), 0)
 
     // Bot will execute this second
-    bot.taskManager_Insert("Hello 1", async (b) => b.chat("Hello 1"), 1000)
+    bot.taskManager_Insert("Hello 1", (b) => b.chat("Hello 1"), 1000)
 
     // Bot will execute this first
-    bot.taskManager_Insert("Hello 0", async (b) => b.chat("Hello 0"))
+    bot.taskManager_Insert("Hello 0", (b) => b.chat("Hello 0"))
+
+    bot.taskManager.Add("look", async (b) => await b.lookAt(b.entity.position.offset(0, 0, 1)), 0)
 })
 ```
 

@@ -11,37 +11,47 @@ var BotTask = /** @class */ (function () {
 }());
 function Plugin(bot) {
     var taskQueue = [];
-    bot.taskManager_Add = function (name, action, delay) {
+    var paused = false;
+    bot.taskManager = {};
+    bot.taskManager.Add = function (name, action, delay) {
         if (delay === void 0) { delay = 0; }
         taskQueue.push(new BotTask(name, action, delay));
     };
-    bot.taskManager_Insert = function (name, action, delay) {
+    bot.taskManager.Insert = function (name, action, delay) {
         if (delay === void 0) { delay = 0; }
         taskQueue.unshift(new BotTask(name, action, delay));
     };
-    bot.taskManager_Remove = function (name) {
+    bot.taskManager.Remove = function (name) {
         taskQueue.splice(taskQueue.findIndex(function (e) { return e.name == name; }), 1);
     };
-    bot.taskManager_Get = function (index) {
+    bot.taskManager.Pause = function () {
+        paused = true;
+    };
+    bot.taskManager.Resume = function () {
+        paused = false;
+    };
+    bot.taskManager.Get = function (index) {
         if (index === void 0) { index = 0; }
         return taskQueue[index];
     };
-    bot.taskManager_GetWholeQueue = function () { return taskQueue.slice(); };
+    bot.taskManager.GetWholeQueue = function () { return taskQueue.slice(); };
     var IsWorking = false;
     bot.on("physicsTick", function () {
-        if (!IsWorking && taskQueue.length > 0) {
+        if (!IsWorking && taskQueue.length > 0 && !paused) {
             IsWorking = true;
             var currentTask_1 = taskQueue[0];
             waitFor(currentTask_1.delay)["finally"](function () {
-                currentTask_1.action(bot)["finally"](function () {
+                var res = currentTask_1.action(bot);
+                if (res)
+                    res["finally"](function () { IsWorking = false; });
+                else
                     IsWorking = false;
-                });
             });
             taskQueue.splice(0, 1);
         }
     });
 }
-exports.Plugin = Plugin;
+exports["default"] = Plugin;
 function waitFor(ms) {
     return new Promise(function (resolve) { return setTimeout(resolve, ms); });
 }
