@@ -1,6 +1,7 @@
 {
     "name": "mineflayer-task-manager",
-    "version": "1.0.9",
+    "displayName": "Mineflayer Task Manager",
+    "version": "1.0.10",
     "description": "A mineflayer task queue manager. It's promise based, but you can also use non async functions in the queue.",
     "main": "index.js",
     "scripts": {
