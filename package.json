@@ -10,5 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "mineflayer": "^4.4.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StoneTrench/mineflayer-task-manager"
+  },
+  "homepage": "https://github.com/StoneTrench/mineflayer-task-manager#readme"
 }
