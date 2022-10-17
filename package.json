@@ -4,9 +4,6 @@
     "version": "1.0.10",
     "description": "A mineflayer task queue manager. It's promise based, but you can also use non async functions in the queue.",
     "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
     "author": "StoneTrench",
     "license": "MIT",
     "dependencies": {
@@ -16,5 +13,15 @@
         "type": "git",
         "url": "https://github.com/StoneTrench/mineflayer-task-manager"
     },
-    "homepage": "https://github.com/StoneTrench/mineflayer-task-manager#readme"
+    "homepage": "https://github.com/StoneTrench/mineflayer-task-manager#readme",
+    "bugs": {
+        "url": "https://github.com/StoneTrench/mineflayer-task-manager/issues"
+    },
+    "keywords": [
+        "mineflayer",
+        "promise",
+        "minecraft",
+        "bot",
+        "task"
+    ]
 }
