@@ -1,6 +1,6 @@
 {
   "name": "mineflayer-task-manager",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A simple plugin to add simple actions to a queue.",
   "main": "index.js",
   "scripts": {

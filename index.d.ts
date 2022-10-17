@@ -1,5 +1,6 @@
 import { Bot, BotOptions } from "mineflayer";
 
+
 declare module "mineflayer" {
     interface Bot {
         taskManager: {
@@ -31,6 +32,10 @@ declare module "mineflayer" {
              * Get the queue.
              */
             GetWholeQueue: () => BotTask[];
+            /**
+             * Removes every element from the queue.
+             */
+            Clear: () => void;
             /**
              * Stops executing tasks in the queue.
              */

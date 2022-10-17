@@ -32,6 +32,10 @@ declare module "mineflayer" {
              */
             GetWholeQueue: () => BotTask[];
             /**
+             * Removes every element from the queue.
+             */
+            Clear: () => void;
+            /**
              * Stops executing tasks in the queue.
              */
             Pause: () => void;
@@ -70,13 +74,15 @@ export default function Plugin(bot: Bot) {
     bot.taskManager.Remove = (name) => {
         taskQueue.splice(taskQueue.findIndex(e => e.name == name), 1);
     }
+    bot.taskManager.Clear = () => {
+        taskQueue.splice(0);
+    }
     bot.taskManager.Pause = () => {
         paused = true;
     }
     bot.taskManager.Resume = () => {
         paused = false;
     }
-
 
     bot.taskManager.Get = (index = 0) => { return taskQueue[index]; }
     bot.taskManager.GetWholeQueue = () => { return [...taskQueue] }
@@ -93,7 +99,7 @@ export default function Plugin(bot: Bot) {
             });
             taskQueue.splice(0, 1);
         }
-    })
+    });
 }
 
 function waitFor(ms: number) {

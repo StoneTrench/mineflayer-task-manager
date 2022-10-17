@@ -24,6 +24,9 @@ function Plugin(bot) {
     bot.taskManager.Remove = function (name) {
         taskQueue.splice(taskQueue.findIndex(function (e) { return e.name == name; }), 1);
     };
+    bot.taskManager.Clear = function () {
+        taskQueue.splice(0);
+    };
     bot.taskManager.Pause = function () {
         paused = true;
     };
