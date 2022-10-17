@@ -1,19 +1,19 @@
 {
-  "name": "mineflayer-task-manager",
-  "version": "1.0.8",
-  "description": "A simple plugin to add simple actions to a queue.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "mineflayer": "^4.4.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/StoneTrench/mineflayer-task-manager"
-  },
-  "homepage": "https://github.com/StoneTrench/mineflayer-task-manager#readme"
+    "name": "mineflayer-task-manager",
+    "version": "1.0.9",
+    "description": "A mineflayer task queue manager. It's promise based, but you can also use non async functions in the queue.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "StoneTrench",
+    "license": "MIT",
+    "dependencies": {
+        "mineflayer": "^4.4.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/StoneTrench/mineflayer-task-manager"
+    },
+    "homepage": "https://github.com/StoneTrench/mineflayer-task-manager#readme"
 }
