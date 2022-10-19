@@ -12,7 +12,7 @@ class BotTask {
     }
 }
 
-export default function Plugin(bot: Bot) {
+export default (bot: Bot) => {
     const taskQueue: BotTask[] = [];
     let paused = false;
 

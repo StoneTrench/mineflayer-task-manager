@@ -67,5 +67,3 @@ declare class BotTask {
 
     constructor(name: string, action: Promise<any>, delay?: number);
 }
-
-declare function Plugin(bot: Bot, options: BotOptions): void
