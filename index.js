@@ -26,8 +26,11 @@ function taskManager(bot) {
         if (index != -1)
             taskQueue.splice(index, 1);
     };
+    bot.taskManager.Removef = function (predicate) {
+        taskQueue = taskQueue.filter(predicate);
+    };
     bot.taskManager.Clear = function () {
-        taskQueue.splice(0);
+        taskQueue = [];
     };
     bot.taskManager.Pause = function () {
         paused = true;

@@ -1,4 +1,4 @@
-import { Bot, BotOptions } from "mineflayer";
+import { Bot } from "mineflayer";
 
 declare module "mineflayer-task-manager"{
     export function taskManager(bot: Bot): void;
@@ -27,6 +27,11 @@ declare module "mineflayer" {
              */
             Remove: (name: string) => void;
             /**
+             * Remove all the tasks for which the predicate returned false, from the queue.
+             * @param predicate Basically the filter.
+             */
+            Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void;
+            /**
              * Get an action from the queue.
              * @param index the index of the task, set to 0 by default.
              */
@@ -50,6 +55,7 @@ declare module "mineflayer" {
         }
     }
 }
+
 
 /**
  * Task class.

@@ -2,7 +2,30 @@
 
 A mineflayer task queue manager. It's promise based, but you can also use non async functions in the queue.
 
-Example usage:
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+  - [Installation](#installation)
+  - [Usage](#usage)
+- [Api documentation](#api-documentation)
+      - [Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#add-name-string-action-bot-bot--promiseany--void-delay-number--void)
+      - [Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#insert-name-string-action-bot-bot--promiseany--void-delay-number--void)
+      - [GetWholeQueue: () => BotTask[]](#getwholequeue---bottask)
+      - [Get: (index?: number) => BotTask](#get-index-number--bottask)
+      - [Remove: (name: string) => void](#remove-name-string--void)
+      - [Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void](#removef-predicate-task-bottask-index-number-queue-bottask--boolean--void)
+      - [Clear: () => void](#clear---void)
+      - [Resume: () => void](#resume---void)
+      - [Pause: () => void](#pause---void)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Installation
+    `npm i mineflayer-task-manager`
+
+## Usage
+Example usage (in typescript):
 ```ts
 import { createBot } from "mineflayer";
 import { taskManager } from "mineflayer-task-manager";
@@ -30,21 +53,31 @@ bot.once("spawn", () => {
 })
 ```
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+Looks at the nearest entity, then says hello.
+```ts
+import { createBot } from "mineflayer";
+import { taskManager } from "mineflayer-task-manager";
 
-- [Api documentation](#api-documentation)
-      - [Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#add-name-string-action-bot-bot--promiseany--void-delay-number--void)
-      - [Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#insert-name-string-action-bot-bot--promiseany--void-delay-number--void)
-      - [GetWholeQueue: () => BotTask[]](#getwholequeue---bottask)
-      - [Get: (index?: number) => BotTask](#get-index-number--bottask)
-      - [Remove: (name: string) => void](#remove-name-string--void)
-      - [Clear: () => void](#clear---void)
-      - [Resume: () => void](#resume---void)
-      - [Pause: () => void](#pause---void)
+const bot = createBot({
+    username: "Steve",
+    host: "localhost",
+    port: 25565
+})
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+bot.loadPlugin(taskManager)
+
+bot.once("spawn", () => {
+    bot.taskManager.Add("look", async (b) => {
+        var entity = b.nearestEntity();
+        if (entity == null)
+            b.chat("No entity");
+        else
+            await b.lookAt(entity.position.offset(0, entity.height, 0))
+    }, 0)
+
+    bot.taskManager.Add("hello", (b) => b.chat("Hello"))
+})
+```
 
 # Api documentation
 
@@ -70,6 +103,10 @@ bot.once("spawn", () => {
 #### Remove: (name: string) => void
 	Remove an action from the queue.
 	`name` The name of the action use it to distinguish it from the rest.
+
+#### Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void
+    Remove all the tasks for which the predicate returned false, from the queue.
+    `predicate` Basically the filter.
 
 #### Clear: () => void
     Removes every element from the queue.

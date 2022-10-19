@@ -1,6 +1,5 @@
 import { Bot } from "mineflayer";
 
-
 declare module "mineflayer" {
     interface Bot {
         taskManager: {
@@ -23,6 +22,11 @@ declare module "mineflayer" {
              * @param name The name of the action use it to distinguish it from the rest.
              */
             Remove: (name: string) => void;
+            /**
+             * Remove all the tasks for which the predicate returned false, from the queue.
+             * @param predicate Basically the filter.
+             */
+            Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void;
             /**
              * Get an action from the queue.
              * @param index the index of the task, set to 0 by default.
@@ -61,7 +65,7 @@ class BotTask {
 }
 
 export function taskManager(bot: Bot) {
-    const taskQueue: BotTask[] = [];
+    let taskQueue: BotTask[] = [];
     let paused = false;
 
     bot.taskManager = {} as any;
@@ -77,8 +81,11 @@ export function taskManager(bot: Bot) {
         if (index != -1)
             taskQueue.splice(index, 1);
     }
+    bot.taskManager.Removef = (predicate) => {
+        taskQueue = taskQueue.filter(predicate)
+    }
     bot.taskManager.Clear = () => {
-        taskQueue.splice(0);
+        taskQueue = [];
     }
     bot.taskManager.Pause = () => {
         paused = true;
