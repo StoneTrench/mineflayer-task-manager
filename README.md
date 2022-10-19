@@ -13,7 +13,7 @@ const bot = createBot({
     port: 25565
 })
 
-bot.loadPlugin(TaskManager)
+bot.loadPlugin(taskManager)
 
 bot.once("spawn", () => {
     // Bot will say "Hello 2" one second after it spawned because of Hello 1 executing after 1000 ms,

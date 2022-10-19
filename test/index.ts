@@ -7,7 +7,7 @@ const bot = createBot({
     port: 25565
 })
 
-bot.loadPlugin(TaskManager)
+bot.loadPlugin(taskManager)
 
 bot.on("error", console.log)
 bot.on("kicked", console.log)

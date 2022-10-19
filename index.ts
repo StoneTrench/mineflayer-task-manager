@@ -60,7 +60,7 @@ class BotTask {
     }
 }
 
-export default function taskManager(bot: Bot) {
+export function taskManager(bot: Bot) {
     const taskQueue: BotTask[] = [];
     let paused = false;
 
