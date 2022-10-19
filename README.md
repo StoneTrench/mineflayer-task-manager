@@ -4,7 +4,7 @@ A mineflayer task queue manager. It's promise based, but you can also use non as
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
 
   - [Installation](#installation)
   - [Usage](#usage)
@@ -22,7 +22,7 @@ A mineflayer task queue manager. It's promise based, but you can also use non as
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Installation
-    `npm i mineflayer-task-manager`
+    npm i mineflayer-task-manager
 
 ## Usage
 Example usage (in typescript):
@@ -83,30 +83,30 @@ bot.once("spawn", () => {
 
 #### Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
 	Add an action to the task queue.
-	`name` The name of the action use it to distinguish it from the rest.
-	`action` the promise based function to execute when we get to it.
-	`delay` the time in ms to wait before executing the action, set to 0 by default.
+	*name* The name of the action use it to distinguish it from the rest.
+	*action* the promise based function to execute when we get to it.
+	*delay* the time in ms to wait before executing the action, set to 0 by default.
 
 #### Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
 	Add an action to the start of the task queue.
-	`name` The name of the action use it to distinguish it from the rest.
-	`action` the promise based function to execute when we get to it.
-	`delay` the time in ms to wait before executing the action, set to 0 by default.
+	*name* The name of the action use it to distinguish it from the rest.
+	*action* the promise based function to execute when we get to it.
+	*delay* the time in ms to wait before executing the action, set to 0 by default.
 
 #### GetWholeQueue: () => BotTask[]
 	Get the queue.
 
 #### Get: (index?: number) => BotTask
 	Get an action from the queue.
-	`index` the index of the task, set to 0 by default.
+	*index* the index of the task, set to 0 by default.
 
 #### Remove: (name: string) => void
 	Remove an action from the queue.
-	`name` The name of the action use it to distinguish it from the rest.
+	*name* The name of the action use it to distinguish it from the rest.
 
 #### Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void
     Remove all the tasks for which the predicate returned false, from the queue.
-    `predicate` Basically the filter.
+    *predicate* Basically the filter.
 
 #### Clear: () => void
     Removes every element from the queue.
