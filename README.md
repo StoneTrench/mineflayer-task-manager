@@ -6,18 +6,18 @@ A mineflayer task queue manager. It's promise based, but you can also use non as
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-  - [Installation](#installation)
-  - [Usage](#usage)
+- [Installation](#installation)
+- [Usage](#usage)
 - [Api documentation](#api-documentation)
-      - [Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#add-name-string-action-bot-bot--promiseany--void-delay-number--void)
-      - [Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#insert-name-string-action-bot-bot--promiseany--void-delay-number--void)
-      - [GetWholeQueue: () => BotTask[]](#getwholequeue---bottask)
-      - [Get: (index?: number) => BotTask](#get-index-number--bottask)
-      - [Remove: (name: string) => void](#remove-name-string--void)
-      - [Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void](#removef-predicate-task-bottask-index-number-queue-bottask--boolean--void)
-      - [Clear: () => void](#clear---void)
-      - [Resume: () => void](#resume---void)
-      - [Pause: () => void](#pause---void)
+  - [Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#add-name-string-action-bot-bot--promiseany--void-delay-number--void)
+  - [Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#insert-name-string-action-bot-bot--promiseany--void-delay-number--void)
+  - [GetWholeQueue: () => BotTask[]](#getwholequeue---bottask)
+  - [Get: (index?: number) => BotTask](#get-index-number--bottask)
+  - [Remove: (name: string) => void](#remove-name-string--void)
+  - [Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void](#removef-predicate-task-bottask-index-number-queue-bottask--boolean--void)
+  - [Clear: () => void](#clear---void)
+  - [Resume: () => void](#resume---void)
+  - [Pause: () => void](#pause---void)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -79,40 +79,40 @@ bot.once("spawn", () => {
 })
 ```
 
-# Api documentation
+## Api documentation
 
-#### Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
+### Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
 	Add an action to the task queue.
 	*name* The name of the action use it to distinguish it from the rest.
 	*action* the promise based function to execute when we get to it.
 	*delay* the time in ms to wait before executing the action, set to 0 by default.
 
-#### Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
+### Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
 	Add an action to the start of the task queue.
 	*name* The name of the action use it to distinguish it from the rest.
 	*action* the promise based function to execute when we get to it.
 	*delay* the time in ms to wait before executing the action, set to 0 by default.
 
-#### GetWholeQueue: () => BotTask[]
+### GetWholeQueue: () => BotTask[]
 	Get the queue.
 
-#### Get: (index?: number) => BotTask
+### Get: (index?: number) => BotTask
 	Get an action from the queue.
 	*index* the index of the task, set to 0 by default.
 
-#### Remove: (name: string) => void
+### Remove: (name: string) => void
 	Remove an action from the queue.
 	*name* The name of the action use it to distinguish it from the rest.
 
-#### Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void
+### Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void
     Remove all the tasks for which the predicate returned false, from the queue.
     *predicate* Basically the filter.
 
-#### Clear: () => void
+### Clear: () => void
     Removes every element from the queue.
 
-#### Resume: () => void
+### Resume: () => void
 	Resumes executing tasks in the queue.
 
-#### Pause: () => void
+### Pause: () => void
 	Stops executing tasks in the queue.
