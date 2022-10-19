@@ -82,37 +82,37 @@ bot.once("spawn", () => {
 ## Api documentation
 
 ### Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
-	Add an action to the task queue.
-	*name* The name of the action use it to distinguish it from the rest.
-	*action* the promise based function to execute when we get to it.
-	*delay* the time in ms to wait before executing the action, set to 0 by default.
+- Add an action to the task queue.
+- *name* The name of the action use it to distinguish it from the rest.
+- *action* the promise based function to execute when we get to it.
+- *delay* the time in ms to wait before executing the action, set to 0 by default.
 
 ### Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
-	Add an action to the start of the task queue.
-	*name* The name of the action use it to distinguish it from the rest.
-	*action* the promise based function to execute when we get to it.
-	*delay* the time in ms to wait before executing the action, set to 0 by default.
+- Add an action to the start of the task queue.
+- *name* The name of the action use it to distinguish it from the rest.
+- *action* the promise based function to execute when we get to it.
+- *delay* the time in ms to wait before executing the action, set to 0 by default.
 
 ### GetWholeQueue: () => BotTask[]
-	Get the queue.
+- Get the queue.
 
 ### Get: (index?: number) => BotTask
-	Get an action from the queue.
-	*index* the index of the task, set to 0 by default.
+- Get an action from the queue.
+- *index* the index of the task, set to 0 by default.
 
 ### Remove: (name: string) => void
-	Remove an action from the queue.
-	*name* The name of the action use it to distinguish it from the rest.
+- Remove an action from the queue.
+- *name* The name of the action use it to distinguish it from the rest.
 
 ### Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void
-    Remove all the tasks for which the predicate returned false, from the queue.
-    *predicate* Basically the filter.
+- Remove all the tasks for which the predicate returned false, from the queue.
+- *predicate* Basically the filter.
 
 ### Clear: () => void
-    Removes every element from the queue.
+- Removes every element from the queue.
 
 ### Resume: () => void
-	Resumes executing tasks in the queue.
+- Resumes executing tasks in the queue.
 
 ### Pause: () => void
-	Stops executing tasks in the queue.
+- Stops executing tasks in the queue.
