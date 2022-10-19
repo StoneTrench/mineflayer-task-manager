@@ -1,0 +1,12 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "lib": [
+            "ES2015",
+            "ESNext",
+            "ES6",
+            "DOM"
+        ],
+        "esModuleInterop": true
+    }
+}

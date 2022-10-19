@@ -1,6 +1,5 @@
 import { Bot, BotOptions } from "mineflayer";
 
-
 declare module "mineflayer" {
     interface Bot {
         taskManager: {
