@@ -1,5 +1,5 @@
 import { createBot } from "mineflayer";
-import TaskManager from "../index";
+import { taskManager } from "../index";
 
 const bot = createBot({
     username: "Steve",

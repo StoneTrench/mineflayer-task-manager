@@ -1,5 +1,9 @@
 import { Bot, BotOptions } from "mineflayer";
 
+declare module "mineflayer-task-manager"{
+    export function taskManager(bot: Bot): void;
+}
+
 declare module "mineflayer" {
     interface Bot {
         taskManager: {

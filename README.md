@@ -5,7 +5,7 @@ A mineflayer task queue manager. It's promise based, but you can also use non as
 Example usage:
 ```ts
 import { createBot } from "mineflayer";
-import TaskManager from "mineflayer-task-manager";
+import { taskManager } from "mineflayer-task-manager";
 
 const bot = createBot({
     username: "Steve",
