@@ -22,7 +22,9 @@ function Plugin(bot) {
         taskQueue.unshift(new BotTask(name, action, delay));
     };
     bot.taskManager.Remove = function (name) {
-        taskQueue.splice(taskQueue.findIndex(function (e) { return e.name == name; }), 1);
+        var index = taskQueue.findIndex(function (e) { return e.name == name; });
+        if (index != -1)
+            taskQueue.splice(index, 1);
     };
     bot.taskManager.Clear = function () {
         taskQueue.splice(0);

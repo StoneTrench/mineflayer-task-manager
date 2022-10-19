@@ -25,7 +25,9 @@ export default function Plugin(bot: Bot) {
         taskQueue.unshift(new BotTask(name, action, delay))
     }
     bot.taskManager.Remove = (name) => {
-        taskQueue.splice(taskQueue.findIndex(e => e.name == name), 1);
+        let index = taskQueue.findIndex(e => e.name == name);
+        if (index != -1)
+            taskQueue.splice(index, 1);
     }
     bot.taskManager.Clear = () => {
         taskQueue.splice(0);
