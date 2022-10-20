@@ -11,6 +11,7 @@ A mineflayer task queue manager. It's promise based, but you can also use non as
 - [Api documentation](#api-documentation)
   - [Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#add-name-string-action-bot-bot--promiseany--void-delay-number--void)
   - [Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#insert-name-string-action-bot-bot--promiseany--void-delay-number--void)
+  - [InsertAt: (index: number, name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#insertat-index-number-name-string-action-bot-bot--promiseany--void-delay-number--void)
   - [GetWholeQueue: () => BotTask[]](#getwholequeue---bottask)
   - [Get: (index?: number) => BotTask](#get-index-number--bottask)
   - [Remove: (name: string) => void](#remove-name-string--void)
