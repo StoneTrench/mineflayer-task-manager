@@ -10,13 +10,14 @@ const bot = createBot({
 bot.loadPlugin(taskManager)
 
 bot.once("spawn", () => {
-    bot.taskManager.Add("look", async (b) => {
-        var entity = b.nearestEntity();
-        if (entity == null)
-            b.chat("No entity");
-        else
-            await b.lookAt(entity.position.offset(0, entity.height, 0))
-    }, 0)
+    for (let i = 0; i < 10; i++) {
+        bot.taskManager.Add("Jump", () => bot.setControlState("jump", true), 1);
+        bot.taskManager.Add("unJump", () => bot.setControlState("jump", false), 1);
+    }
 
-    bot.taskManager.Add("hello", (b) => b.chat("Hello"))
+    console.log(bot.taskManager.GetWholeQueue().map(e => e.name).join(", "))
+
+    bot.taskManager.InsertAt(4, "A", () => bot.chat("hello"));
+
+    console.log(bot.taskManager.GetWholeQueue().map(e => e.name).join(", "))
 })

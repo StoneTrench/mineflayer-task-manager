@@ -22,6 +22,14 @@ declare module "mineflayer" {
              */
             Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void;
             /**
+             * Add an action at the index of the task queue. Moves the element already at the index by +1 and so on.
+             * @param index The index where the task should go.
+             * @param name The name of the action use it to distinguish it from the rest.
+             * @param action the promise based function to execute when we get to it.
+             * @param delay the time in ms to wait before executing the action, set to 0 by default.
+             */
+            InsertAt: (index: number, name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void;
+            /**
              * Remove an action from the queue.
              * @param name The name of the action use it to distinguish it from the rest.
              */

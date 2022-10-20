@@ -21,6 +21,12 @@ function taskManager(bot) {
         if (delay === void 0) { delay = 0; }
         taskQueue.unshift(new BotTask(name, action, delay));
     };
+    bot.taskManager.InsertAt = function (index, name, action, delay) {
+        if (delay === void 0) { delay = 0; }
+        var half = taskQueue.slice(0, index);
+        half.push(new BotTask(name, action, delay));
+        taskQueue = half.concat(taskQueue.slice(index));
+    };
     bot.taskManager.Remove = function (name) {
         var index = taskQueue.findIndex(function (e) { return e.name == name; });
         if (index != -1)

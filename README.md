@@ -93,6 +93,13 @@ bot.once("spawn", () => {
 - *action* the promise based function to execute when we get to it.
 - *delay* the time in ms to wait before executing the action, set to 0 by default.
 
+### InsertAt: (index: number, name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
+- Add an action at the index of the task queue. Moves the element already at the index by +1 and so on.
+- *index* The index where the task should go.
+- *name* The name of the action use it to distinguish it from the rest.
+- *action* the promise based function to execute when we get to it.
+- *delay* the time in ms to wait before executing the action, set to 0 by default.
+
 ### GetWholeQueue: () => BotTask[]
 - Get the queue.
 
