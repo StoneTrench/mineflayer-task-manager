@@ -12,10 +12,10 @@ var exec = require('child_process').exec;
         ".git",
         "node_modules",
         "Example",
-        ".gitignore"
+        ".gitignore",
     ]
 
-    const plugins = readdirSync(pluginsFolder).filter(e => e == "index.ts");
+    const plugins = readdirSync(pluginsFolder).filter(e => e == "index.d.ts");
 
     let Description: { func: string, desc: string[], variable: boolean }[] = [];
 
@@ -71,11 +71,11 @@ var exec = require('child_process').exec;
                 let descriptionLine = line.replace("* ", "");
                 if (descriptionLine.startsWith("@param")) {
                     const descSplit = descriptionLine.split(" ").splice(1)
-                    descSplit[0] = "`" + descSplit[0] + "`"
+                    descSplit[0] = "*" + descSplit[0] + "*"
                     descriptionLine = descSplit.join(" ");
                 }
                 else if (descriptionLine.startsWith("@returns")) {
-                    descriptionLine = descriptionLine.replace("@returns", "`Returns`");
+                    descriptionLine = descriptionLine.replace("@returns", "*Returns*");
                 }
                 if (descriptionLine.endsWith(".") || descriptionLine.endsWith(";")) {
                     descriptionLine = descriptionLine.slice(0, descriptionLine.length - 1)
@@ -116,13 +116,13 @@ var exec = require('child_process').exec;
             APIFileLines.push("### " + title)
         }
 
-        APIFileLines.push("")
-        APIFileLines.push("#### " + desc.func);
+        // APIFileLines.push("")
+        // APIFileLines.push("#### " + desc.func);
 
         if(desc.desc.length == 0) console.log(desc.func + "\nHas no description!" )
 
         for (let l = 0; l < desc.desc.length; l++) {
-            APIFileLines.push("\t" + desc.desc[l] + ".");
+            APIFileLines.push("- " + desc.desc[l] + ".");
         }
     }
 

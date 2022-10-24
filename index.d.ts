@@ -3,6 +3,7 @@ import { Bot } from "mineflayer";
 declare module "mineflayer-task-manager"{
     export function taskManager(bot: Bot): void;
 }
+declare type Action = ((bot: Bot) => void | Promise<void>)
 
 declare module "mineflayer" {
     interface Bot {
@@ -10,25 +11,25 @@ declare module "mineflayer" {
             /**
              * Add an action to the task queue.
              * @param name The name of the action use it to distinguish it from the rest.
-             * @param action the promise based function to execute when we get to it.
+             * @param action the promise/void based function to execute when we get to it.
              * @param delay the time in ms to wait before executing the action, set to 0 by default.
              */
-            Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void;
+            Add: (name: string, action: Action, delay?: number) => void;
             /**
              * Add an action to the start of the task queue.
              * @param name The name of the action use it to distinguish it from the rest.
-             * @param action the promise based function to execute when we get to it.
+             * @param action the promise/void based function to execute when we get to it.
              * @param delay the time in ms to wait before executing the action, set to 0 by default.
              */
-            Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void;
+            Insert: (name: string, action: Action, delay?: number) => void;
             /**
              * Add an action at the index of the task queue. Moves the element already at the index by +1 and so on.
              * @param index The index where the task should go.
              * @param name The name of the action use it to distinguish it from the rest.
-             * @param action the promise based function to execute when we get to it.
+             * @param action the promise/void based function to execute when we get to it.
              * @param delay the time in ms to wait before executing the action, set to 0 by default.
              */
-            InsertAt: (index: number, name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void;
+            InsertAt: (index: number, name: string, action: Action, delay?: number) => void;
             /**
              * Remove an action from the queue.
              * @param name The name of the action use it to distinguish it from the rest.
@@ -74,13 +75,13 @@ declare class BotTask {
      */
     name: string;
     /**
-     * The promise based function to execute when we get to it.
+     * the promise/void based function to execute when we get to it.
      */
-    action: (bot: Bot) => Promise<any>;
+    action: Action;
     /**
      * The time in ms to wait before executing the action, set to 0 by default.
      */
     delay: number;
 
-    constructor(name: string, action: Promise<any>, delay?: number);
+    constructor(name: string, action: Action, delay?: number);
 }
