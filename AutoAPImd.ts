@@ -87,7 +87,7 @@ var exec = require('child_process').exec;
         }
     }
 
-    Description = Description.sort((a, b) => (a.variable ? 1 : 0) - (b.variable ? 1 : 0))
+    Description = Description.sort((a, b) => (a.variable ? 1 : 0) - (b.variable ? 1 : 0)).reverse()
 
     const APIFileLines: string[] = []
 

@@ -43,10 +43,12 @@ declare module "mineflayer" {
             /**
              * Get an action from the queue.
              * @param index the index of the task, set to 0 by default.
+             * @returns The bot task at the index.
              */
             Get: (index?: number) => BotTask;
             /**
              * Get the queue.
+             * @returns The whole queue.
              */
             GetWholeQueue: () => BotTask[];
             /**

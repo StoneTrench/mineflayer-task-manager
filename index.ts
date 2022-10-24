@@ -1,71 +1,76 @@
 import { Bot } from "mineflayer";
 
-// declare module "mineflayer" {
-//     interface Bot {
-//         taskManager: {
-//             /**
-//              * Add an action to the task queue.
-//              * @param name The name of the action use it to distinguish it from the rest.
-//              * @param action the promise based function to execute when we get to it.
-//              * @param delay the time in ms to wait before executing the action, set to 0 by default.
-//              */
-//             Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void;
-//             /**
-//              * Add an action to the start of the task queue.
-//              * @param name The name of the action use it to distinguish it from the rest.
-//              * @param action the promise based function to execute when we get to it.
-//              * @param delay the time in ms to wait before executing the action, set to 0 by default.
-//              */
-//             Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void;
-//             /**
-//              * Add an action at the index of the task queue. Moves the element already at the index by +1 and so on.
-//              * @param index The index where the task should go.
-//              * @param name The name of the action use it to distinguish it from the rest.
-//              * @param action the promise based function to execute when we get to it.
-//              * @param delay the time in ms to wait before executing the action, set to 0 by default.
-//              */
-//             InsertAt: (index: number, name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void;
-//             /**
-//              * Remove an action from the queue.
-//              * @param name The name of the action use it to distinguish it from the rest.
-//              */
-//             Remove: (name: string) => void;
-//             /**
-//              * Remove all the tasks for which the predicate returned false, from the queue.
-//              * @param predicate Basically the filter.
-//              */
-//             Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void;
-//             /**
-//              * Get an action from the queue.
-//              * @param index the index of the task, set to 0 by default.
-//              */
-//             Get: (index?: number) => BotTask;
-//             /**
-//              * Get the queue.
-//              */
-//             GetWholeQueue: () => BotTask[];
-//             /**
-//              * Removes every element from the queue.
-//              */
-//             Clear: () => void;
-//             /**
-//              * Stops executing tasks in the queue.
-//              */
-//             Pause: () => void;
-//             /**
-//              * Resumes executing tasks in the queue.
-//              */
-//             Resume: () => void;
-//         }
-//     }
-// }
+//#region Just copy this part from the index.d.ts
+declare type Action = ((bot: Bot) => void | Promise<void>)
+declare module "mineflayer" {
+    interface Bot {
+        taskManager: {
+            /**
+             * Add an action to the task queue.
+             * @param name The name of the action use it to distinguish it from the rest.
+             * @param action the promise/void based function to execute when we get to it.
+             * @param delay the time in ms to wait before executing the action, set to 0 by default.
+             */
+            Add: (name: string, action: Action, delay?: number) => void;
+            /**
+             * Add an action to the start of the task queue.
+             * @param name The name of the action use it to distinguish it from the rest.
+             * @param action the promise/void based function to execute when we get to it.
+             * @param delay the time in ms to wait before executing the action, set to 0 by default.
+             */
+            Insert: (name: string, action: Action, delay?: number) => void;
+            /**
+             * Add an action at the index of the task queue. Moves the element already at the index by +1 and so on.
+             * @param index The index where the task should go.
+             * @param name The name of the action use it to distinguish it from the rest.
+             * @param action the promise/void based function to execute when we get to it.
+             * @param delay the time in ms to wait before executing the action, set to 0 by default.
+             */
+            InsertAt: (index: number, name: string, action: Action, delay?: number) => void;
+            /**
+             * Remove an action from the queue.
+             * @param name The name of the action use it to distinguish it from the rest.
+             */
+            Remove: (name: string) => void;
+            /**
+             * Remove all the tasks for which the predicate returned false, from the queue.
+             * @param predicate Basically the filter.
+             */
+            Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void;
+            /**
+             * Get an action from the queue.
+             * @param index the index of the task, set to 0 by default.
+             * @returns The bot task at the index.
+             */
+            Get: (index?: number) => BotTask;
+            /**
+             * Get the queue.
+             * @returns The whole queue.
+             */
+            GetWholeQueue: () => BotTask[];
+            /**
+             * Removes every element from the queue.
+             */
+            Clear: () => void;
+            /**
+             * Stops executing tasks in the queue.
+             */
+            Pause: () => void;
+            /**
+             * Resumes executing tasks in the queue.
+             */
+            Resume: () => void;
+        }
+    }
+}
+//#endregion
 
 class BotTask {
     name: string;
-    action: (bot: Bot) => Promise<any>;
+    action: Action;
     delay: number;
 
-    constructor(name, action, delay = 0) {
+    constructor(name: string, action: Action, delay: number = 0) {
         this.name = name;
         this.action = action;
         this.delay = delay;
@@ -75,6 +80,7 @@ class BotTask {
 export function taskManager(bot: Bot) {
     let taskQueue: BotTask[] = [];
     let paused = false;
+    let currentTask: BotTask | null = null;
 
     bot.taskManager = {} as any;
 
@@ -114,15 +120,31 @@ export function taskManager(bot: Bot) {
     bot.on("physicsTick", () => {
         if (!IsWorking && taskQueue.length > 0 && !paused) {
             IsWorking = true;
-            const currentTask = taskQueue[0];
-            waitFor(currentTask.delay).finally(() => {
-                var res = currentTask.action(bot);
-                if (res) res.finally(() => { IsWorking = false });
-                else IsWorking = false
-            });
-            taskQueue.splice(0, 1);
+            currentTask = taskQueue.shift() as BotTask; // Since if all is well this will never set it to null;
+            if (currentTask.delay > 0) {
+                waitFor(currentTask.delay).finally(() => {
+                    CompleteTask();
+                });
+            }
+            else {
+                CompleteTask();
+            }
         }
     });
+
+    function CompleteTask() {
+        var btsk = (currentTask as BotTask);
+        if (btsk.action == null) return new Error(`${btsk.name} BotTask action was null!`)
+        var res = btsk.action(bot); // This shouldn't ever be null;
+        if (res && res.finally) res.finally(() => {
+            currentTask = null;
+            IsWorking = false
+        });
+        else {
+            currentTask = null;
+            IsWorking = false
+        }
+    }
 }
 
 function waitFor(ms: number) {

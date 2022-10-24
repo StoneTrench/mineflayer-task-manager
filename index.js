@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+//#endregion
 var BotTask = /** @class */ (function () {
     function BotTask(name, action, delay) {
         if (delay === void 0) { delay = 0; }
@@ -12,6 +13,7 @@ var BotTask = /** @class */ (function () {
 function taskManager(bot) {
     var taskQueue = [];
     var paused = false;
+    var currentTask = null;
     bot.taskManager = {};
     bot.taskManager.Add = function (name, action, delay) {
         if (delay === void 0) { delay = 0; }
@@ -53,17 +55,32 @@ function taskManager(bot) {
     bot.on("physicsTick", function () {
         if (!IsWorking && taskQueue.length > 0 && !paused) {
             IsWorking = true;
-            var currentTask_1 = taskQueue[0];
-            waitFor(currentTask_1.delay)["finally"](function () {
-                var res = currentTask_1.action(bot);
-                if (res)
-                    res["finally"](function () { IsWorking = false; });
-                else
-                    IsWorking = false;
-            });
-            taskQueue.splice(0, 1);
+            currentTask = taskQueue.shift(); // Since if all is well this will never set it to null;
+            if (currentTask.delay > 0) {
+                waitFor(currentTask.delay)["finally"](function () {
+                    CompleteTask();
+                });
+            }
+            else {
+                CompleteTask();
+            }
         }
     });
+    function CompleteTask() {
+        var btsk = currentTask;
+        if (btsk.action == null)
+            return new Error(btsk.name + " BotTask action was null!");
+        var res = btsk.action(bot); // This shouldn't ever be null;
+        if (res && res["finally"])
+            res["finally"](function () {
+                //currentTask = null;
+                IsWorking = false;
+            });
+        else {
+            //currentTask = null;
+            IsWorking = false;
+        }
+    }
 }
 exports.taskManager = taskManager;
 function waitFor(ms) {

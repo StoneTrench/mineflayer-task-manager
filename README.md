@@ -9,16 +9,16 @@ A mineflayer task queue manager. It's promise based, but you can also use non as
 - [Installation](#installation)
 - [Usage](#usage)
 - [Api documentation](#api-documentation)
-  - [Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#add-name-string-action-bot-bot--promiseany--void-delay-number--void)
-  - [Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#insert-name-string-action-bot-bot--promiseany--void-delay-number--void)
-  - [InsertAt: (index: number, name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void](#insertat-index-number-name-string-action-bot-bot--promiseany--void-delay-number--void)
-  - [GetWholeQueue: () => BotTask[]](#getwholequeue---bottask)
-  - [Get: (index?: number) => BotTask](#get-index-number--bottask)
+  - [Add: (name: string, action: Action, delay?: number) => void](#add-name-string-action-action-delay-number--void)
+  - [Insert: (name: string, action: Action, delay?: number) => void](#insert-name-string-action-action-delay-number--void)
+  - [InsertAt: (index: number, name: string, action: Action, delay?: number) => void](#insertat-index-number-name-string-action-action-delay-number--void)
   - [Remove: (name: string) => void](#remove-name-string--void)
   - [Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void](#removef-predicate-task-bottask-index-number-queue-bottask--boolean--void)
+  - [Get: (index?: number) => BotTask](#get-index-number--bottask)
+  - [GetWholeQueue: () => BotTask[]](#getwholequeue---bottask)
   - [Clear: () => void](#clear---void)
-  - [Resume: () => void](#resume---void)
   - [Pause: () => void](#pause---void)
+  - [Resume: () => void](#resume---void)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -26,7 +26,32 @@ A mineflayer task queue manager. It's promise based, but you can also use non as
     npm i mineflayer-task-manager
 
 ## Usage
-Example usage (in typescript):
+Makes 10 tasks that make the bot spin by 45 degrees every half a second, then writes the task queue to the terminal: (javascript)
+```js
+const createBot = require("mineflayer").createBot;
+const taskManager = require("../index").taskManager;
+
+const bot = createBot({
+    username: "Steve",
+    host: "localhost",
+    port: 25565
+})
+
+bot.loadPlugin(taskManager)
+
+bot.once("spawn", () => {
+    for (let i = 0; i < 10; i++) {
+        bot.taskManager.Add("Spin", spin, 500);
+    }
+    console.log(bot.taskManager.GetWholeQueue().map(e => e.name).join(", "));
+})
+
+function spin(b) {
+    b.entity.yaw += Math.PI / 4;
+}
+```
+
+Example usage: (typescript)
 ```ts
 import { createBot } from "mineflayer";
 import { taskManager } from "mineflayer-task-manager";
@@ -54,7 +79,7 @@ bot.once("spawn", () => {
 })
 ```
 
-Looks at the nearest entity, then says hello.
+Looks at the nearest entity, then says hello: (typescript)
 ```ts
 import { createBot } from "mineflayer";
 import { taskManager } from "mineflayer-task-manager";
@@ -82,31 +107,24 @@ bot.once("spawn", () => {
 
 ## Api documentation
 
-### Add: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
+### Add: (name: string, action: Action, delay?: number) => void
 - Add an action to the task queue.
 - *name* The name of the action use it to distinguish it from the rest.
-- *action* the promise based function to execute when we get to it.
+- *action* the promise/void based function to execute when we get to it.
 - *delay* the time in ms to wait before executing the action, set to 0 by default.
 
-### Insert: (name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
+### Insert: (name: string, action: Action, delay?: number) => void
 - Add an action to the start of the task queue.
 - *name* The name of the action use it to distinguish it from the rest.
-- *action* the promise based function to execute when we get to it.
+- *action* the promise/void based function to execute when we get to it.
 - *delay* the time in ms to wait before executing the action, set to 0 by default.
 
-### InsertAt: (index: number, name: string, action: (bot: Bot) => (Promise<any> | void), delay?: number) => void
+### InsertAt: (index: number, name: string, action: Action, delay?: number) => void
 - Add an action at the index of the task queue. Moves the element already at the index by +1 and so on.
 - *index* The index where the task should go.
 - *name* The name of the action use it to distinguish it from the rest.
-- *action* the promise based function to execute when we get to it.
+- *action* the promise/void based function to execute when we get to it.
 - *delay* the time in ms to wait before executing the action, set to 0 by default.
-
-### GetWholeQueue: () => BotTask[]
-- Get the queue.
-
-### Get: (index?: number) => BotTask
-- Get an action from the queue.
-- *index* the index of the task, set to 0 by default.
 
 ### Remove: (name: string) => void
 - Remove an action from the queue.
@@ -116,11 +134,20 @@ bot.once("spawn", () => {
 - Remove all the tasks for which the predicate returned false, from the queue.
 - *predicate* Basically the filter.
 
+### Get: (index?: number) => BotTask
+- Get an action from the queue.
+- *index* the index of the task, set to 0 by default.
+- *Returns* The bot task at the index.
+
+### GetWholeQueue: () => BotTask[]
+- Get the queue.
+- *Returns* The whole queue.
+
 ### Clear: () => void
 - Removes every element from the queue.
 
-### Resume: () => void
-- Resumes executing tasks in the queue.
-
 ### Pause: () => void
 - Stops executing tasks in the queue.
+
+### Resume: () => void
+- Resumes executing tasks in the queue.
