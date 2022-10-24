@@ -9,6 +9,7 @@ A mineflayer task queue manager. It's promise based, but you can also use non as
 - [Installation](#installation)
 - [Usage](#usage)
 - [Api documentation](#api-documentation)
+  - [Action](#action)
   - [Add: (name: string, action: Action, delay?: number) => void](#add-name-string-action-action-delay-number--void)
   - [Insert: (name: string, action: Action, delay?: number) => void](#insert-name-string-action-action-delay-number--void)
   - [InsertAt: (index: number, name: string, action: Action, delay?: number) => void](#insertat-index-number-name-string-action-action-delay-number--void)
@@ -106,6 +107,10 @@ bot.once("spawn", () => {
 ```
 
 ## Api documentation
+
+### Action
+- It's either a function or an async/Promise function.
+- *Action = ((bot: Bot) => void | Promise<void>)*
 
 ### Add: (name: string, action: Action, delay?: number) => void
 - Add an action to the task queue.
