@@ -31,7 +31,7 @@ A mineflayer task queue manager. It's promise based, but you can also use non as
 Makes 10 tasks that make the bot spin by 45 degrees every half a second, then writes the task queue to the terminal: (javascript)
 ```js
 const createBot = require("mineflayer").createBot;
-const taskManager = require("../index").taskManager;
+const taskManager = require("mineflayer-task-manager").taskManager;
 
 const bot = createBot({
     username: "Steve",
@@ -60,7 +60,7 @@ function spin(b) {
 Here's the same example but using the InsertQueue function: (javascript)
 ```js
 const createBot = require("mineflayer").createBot;
-const taskManager = require("../index").taskManager;
+const taskManager = require("mineflayer-task-manager").taskManager;
 
 const bot = createBot({
     username: "Steve",
