@@ -1,0 +1,10 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "esModuleInterop": false,
+        "lib": [
+            "ESNext",
+            "ES2022"
+        ]
+    }
+}

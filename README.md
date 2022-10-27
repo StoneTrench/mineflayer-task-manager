@@ -12,6 +12,7 @@ A mineflayer task queue manager. It's promise based, but you can also use non as
   - [Action](#action)
   - [Add: (name: string, action: Action, delay?: number) => void](#add-name-string-action-action-delay-number--void)
   - [Insert: (name: string, action: Action, delay?: number) => void](#insert-name-string-action-action-delay-number--void)
+  - [InsertQueue: (name: string | string[], actions: Action[], add?: boolean, delays?: number[]) => void](#insertqueue-name-string--string-actions-action-add-boolean-delays-number--void)
   - [InsertAt: (index: number, name: string, action: Action, delay?: number) => void](#insertat-index-number-name-string-action-action-delay-number--void)
   - [Remove: (name: string) => void](#remove-name-string--void)
   - [Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void](#removef-predicate-task-bottask-index-number-queue-bottask--boolean--void)
@@ -41,10 +42,46 @@ const bot = createBot({
 bot.loadPlugin(taskManager)
 
 bot.once("spawn", () => {
+    // Creates tasks
     for (let i = 0; i < 10; i++) {
         bot.taskManager.Add("Spin", spin, 500);
     }
+
+    // Writes the tasks to the console
     console.log(bot.taskManager.GetWholeQueue().map(e => e.name).join(", "));
+})
+
+// Rotate by 45 degrees or π/4 radians.
+function spin(b) {
+    b.entity.yaw += Math.PI / 4;
+}
+```
+
+Here's the same example but using the InsertQueue function: (javascript)
+```js
+const createBot = require("mineflayer").createBot;
+const taskManager = require("../index").taskManager;
+
+const bot = createBot({
+    username: "Steve",
+    host: "localhost",
+    port: 25565
+})
+
+bot.loadPlugin(taskManager)
+
+bot.once("spawn", () => {
+    var actions = [];
+    var delays = [];
+
+    for (let i = 0; i < 10; i++) {
+        actions.push(spin);
+        delays.push(500);
+    }
+
+    bot.taskManager.InsertQueue("Spin", actions, false, delays);
+
+    console.log(bot.taskManager.GetWholeQueue().map(e => e.name + " " + e.delay).join(", "));
 })
 
 function spin(b) {
@@ -52,7 +89,7 @@ function spin(b) {
 }
 ```
 
-Example usage: (typescript)
+Hello example: (typescript)
 ```ts
 import { createBot } from "mineflayer";
 import { taskManager } from "mineflayer-task-manager";
@@ -124,9 +161,16 @@ bot.once("spawn", () => {
 - *action* the promise/void based function to execute when we get to it.
 - *delay* the time in ms to wait before executing the action, set to 0 by default.
 
+### InsertQueue: (name: string | string[], actions: Action[], add?: boolean, delays?: number[]) => void
+- You can define an array of actions, and insert them to the start of the queue while they keep their order the same way they are in the actions array.
+- *name* Either a name that it will assign to each action, or an array of names with the same length as the actions array that it will pair up with the actions.
+- *actions* The list of Actions to either insert at the start of the queue, or add at the end of the queue.
+- *add* Incase you want to add the actions to the end of queue instead of inserting them. Set to false by default.
+- *delays* An array containing all the delays for each of the tasks, which will get paired up like the names. Set to an empty array my default.
+
 ### InsertAt: (index: number, name: string, action: Action, delay?: number) => void
 - Add an action at the index of the task queue. Moves the element already at the index by +1 and so on.
-- *index* The index where the task should go.
+- *index* The index where the action should go.
 - *name* The name of the action use it to distinguish it from the rest.
 - *action* the promise/void based function to execute when we get to it.
 - *delay* the time in ms to wait before executing the action, set to 0 by default.
@@ -140,7 +184,7 @@ bot.once("spawn", () => {
 - *predicate* Basically the filter.
 
 ### Get: (index?: number) => BotTask
-- Get an action from the queue.
+- Get a task from the queue.
 - *index* the index of the task, set to 0 by default.
 - *Returns* The bot task at the index.
 

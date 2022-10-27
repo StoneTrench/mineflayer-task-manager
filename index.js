@@ -1,5 +1,15 @@
 "use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 exports.__esModule = true;
+exports.taskManager = void 0;
 //#endregion
 var BotTask = /** @class */ (function () {
     function BotTask(name, action, delay) {
@@ -46,11 +56,28 @@ function taskManager(bot) {
     bot.taskManager.Resume = function () {
         paused = false;
     };
+    bot.taskManager.InsertQueue = function (name, actions, add, delays) {
+        if (add === void 0) { add = false; }
+        if (delays === void 0) { delays = []; }
+        var isArray = typeof name != "string";
+        var doDelays = delays.length > 0;
+        if (!add) {
+            actions = actions.reverse();
+            if (isArray)
+                name = name.reverse();
+        }
+        if (isArray && name.length != actions.length)
+            throw new Error("Name array length is different from actions array length! names: " + name);
+        if (doDelays && delays.length != actions.length)
+            throw new Error("Delay array length is different from actions array length! delays: " + delays);
+        for (var i = 0; i < actions.length; i++)
+            bot.taskManager[add ? "Add" : "Insert"]((isArray ? name[i] : name), actions[i], doDelays ? delays[i] : 0);
+    };
     bot.taskManager.Get = function (index) {
         if (index === void 0) { index = 0; }
         return taskQueue[index];
     };
-    bot.taskManager.GetWholeQueue = function () { return taskQueue.slice(); };
+    bot.taskManager.GetWholeQueue = function () { return __spreadArray([], taskQueue, true); };
     var IsWorking = false;
     bot.on("physicsTick", function () {
         if (!IsWorking && taskQueue.length > 0 && !paused) {
@@ -69,15 +96,15 @@ function taskManager(bot) {
     function CompleteTask() {
         var btsk = currentTask;
         if (btsk.action == null)
-            return new Error(btsk.name + " BotTask action was null!");
+            return new Error("".concat(btsk.name, " BotTask action was null!"));
         var res = btsk.action(bot); // This shouldn't ever be null;
         if (res && res["finally"])
             res["finally"](function () {
-                //currentTask = null;
+                currentTask = null;
                 IsWorking = false;
             });
         else {
-            //currentTask = null;
+            currentTask = null;
             IsWorking = false;
         }
     }

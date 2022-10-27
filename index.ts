@@ -1,7 +1,9 @@
 import { Bot } from "mineflayer";
 
 //#region Just copy this part from the index.d.ts
+
 declare type Action = ((bot: Bot) => void | Promise<void>)
+
 declare module "mineflayer" {
     interface Bot {
         taskManager: {
@@ -20,8 +22,16 @@ declare module "mineflayer" {
              */
             Insert: (name: string, action: Action, delay?: number) => void;
             /**
+             * You can define an array of actions, and insert them to the start of the queue while they keep their order the same way they are in the actions array.
+             * @param name Either a name that it will assign to each action, or an array of names with the same length as the actions array that it will pair up with the actions.
+             * @param actions The list of Actions to either insert at the start of the queue, or add at the end of the queue.
+             * @param add Incase you want to add the actions to the end of queue instead of inserting them. Set to false by default.
+             * @param delays An array containing all the delays for each of the tasks, which will get paired up like the names. Set to an empty array my default.
+             */
+            InsertQueue: (name: string | string[], actions: Action[], add?: boolean, delays?: number[]) => void; 
+            /**
              * Add an action at the index of the task queue. Moves the element already at the index by +1 and so on.
-             * @param index The index where the task should go.
+             * @param index The index where the action should go.
              * @param name The name of the action use it to distinguish it from the rest.
              * @param action the promise/void based function to execute when we get to it.
              * @param delay the time in ms to wait before executing the action, set to 0 by default.
@@ -38,7 +48,7 @@ declare module "mineflayer" {
              */
             Removef: (predicate: (task: BotTask, index: number, queue: BotTask[]) => boolean) => void;
             /**
-             * Get an action from the queue.
+             * Get a task from the queue.
              * @param index the index of the task, set to 0 by default.
              * @returns The bot task at the index.
              */
@@ -63,6 +73,7 @@ declare module "mineflayer" {
         }
     }
 }
+
 //#endregion
 
 class BotTask {
@@ -111,6 +122,21 @@ export function taskManager(bot: Bot) {
     }
     bot.taskManager.Resume = () => {
         paused = false;
+    }
+    bot.taskManager.InsertQueue = (name, actions, add = false, delays = []) => {
+        const isArray = typeof name != "string";
+        const doDelays = delays.length > 0;
+
+        if (!add) {
+            actions = actions.reverse();
+            if (isArray) name = (name as string[]).reverse();
+        }
+
+        if (isArray && name.length != actions.length) throw new Error("Name array length is different from actions array length! names: " + name)
+        if (doDelays && delays.length != actions.length) throw new Error("Delay array length is different from actions array length! delays: " + delays)
+
+        for (let i = 0; i < actions.length; i++)
+            bot.taskManager[add ? "Add" : "Insert"]((isArray ? name[i] : name) as string, actions[i], doDelays ? delays[i] : 0)
     }
 
     bot.taskManager.Get = (index = 0) => { return taskQueue[index]; }
