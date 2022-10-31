@@ -65,6 +65,8 @@ function taskManager(bot) {
             actions = actions.reverse();
             if (isArray)
                 name = name.reverse();
+            if (doDelays)
+                delays = delays.reverse();
         }
         if (isArray && name.length != actions.length)
             throw new Error("Name array length is different from actions array length! names: " + name);

@@ -28,7 +28,7 @@ declare module "mineflayer" {
              * @param add Incase you want to add the actions to the end of queue instead of inserting them. Set to false by default.
              * @param delays An array containing all the delays for each of the tasks, which will get paired up like the names. Set to an empty array my default.
              */
-            InsertQueue: (name: string | string[], actions: Action[], add?: boolean, delays?: number[]) => void; 
+            InsertQueue: (name: string | string[], actions: Action[], add?: boolean, delays?: number[]) => void;
             /**
              * Add an action at the index of the task queue. Moves the element already at the index by +1 and so on.
              * @param index The index where the action should go.
@@ -130,6 +130,7 @@ export function taskManager(bot: Bot) {
         if (!add) {
             actions = actions.reverse();
             if (isArray) name = (name as string[]).reverse();
+            if (doDelays) delays = delays.reverse();
         }
 
         if (isArray && name.length != actions.length) throw new Error("Name array length is different from actions array length! names: " + name)
